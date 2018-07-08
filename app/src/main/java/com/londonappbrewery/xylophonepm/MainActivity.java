@@ -1,6 +1,7 @@
 package com.londonappbrewery.xylophonepm;
 
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
+
+    MediaPlayer drumLoop;
 
     // Helpful Constants
     private final int NR_OF_SIMULTANEOUS_SOUNDS = 7;
@@ -31,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        drumLoop = MediaPlayer.create(getApplicationContext(),R.raw.drum);
+        drumLoop.setLooping(true);
+        drumLoop.start();
 
         // TODO: Create a new SoundPool
         mSoundPool = new SoundPool(7, AudioManager.STREAM_MUSIC, 0);
@@ -81,6 +88,18 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Xylophone", "Purple button clicked!");
         mSoundPool.play(mBSoundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, NO_LOOP, NORMAL_PLAY_RATE);
         // video 6,22
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        drumLoop.pause();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        drumLoop.start();
     }
 
 }
